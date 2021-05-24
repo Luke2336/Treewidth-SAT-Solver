@@ -22,10 +22,21 @@ vector<vector<int>> genClauses(const vector<vector<bool>> G, const int k) {
   auto ctr = [&](int i, int j, int l) {
     return (l - 1) * n * n + i * n + j + 1 + 2 * n * n;
   };
-  // Triangulation
   vector<vector<int>> clauses;
+  // Transtivity
   for (int i = 0; i < n; i++) {
-    // TODO
+    for (int j = 0; j < n; j++) {
+      if (i == j)
+        continue;
+      for (int l = 0; l < n; l++) {
+        if (i == l || j == l)
+          continue;
+        int ij = (i < j) ? ord(i, j) : -ord(j, i);
+        int jl = (j < l) ? ord(j, l) : -ord(l, j);
+        int il = (i < l) ? ord(i, l) : -ord(l, i);
+        clauses.emplace_back(vector<int>{-ij, -jl, il});
+      }
+    }
   }
   for (int i = 0; i < n; i++) {
     for (int j = i + 1; j < n; j++) {
@@ -35,7 +46,6 @@ vector<vector<int>> genClauses(const vector<vector<bool>> G, const int k) {
       clauses.emplace_back(vector<int>{ord(i, j), arc(j, i)});
     }
   }
-  // Transtivity
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
       if (i == j)
