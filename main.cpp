@@ -83,7 +83,7 @@ vector<vector<int>> genClauses(const vector<vector<bool>> G, const int k) {
   // Accelerate
   for (int i = 0; i < n; i++)
     for (int j = 0; j < n; j++)
-      for (int l = 1; l <= n; l++)
+      for (int l = 0; l < n; l++)
         clauses.emplace_back(
             vector<int>{-arc(i, j), -arc(i, l), -arc(j, l), -arc(l, j)});
   return clauses;
