@@ -77,7 +77,7 @@ vector<vector<int>> genClauses(const vector<vector<bool>> G, const int k) {
 }
 
 void writeCNF(int n, int k, vector<vector<int>> clauses) {
-  FILE *fp = freopen("tmp.in", "r", stdin);
+  FILE *fp = freopen("tmp.in", "w", stdout);
   cout << "c\np cnf " << n * n * (k + 2) << ' ' << clauses.size() << '\n';
   for (auto clause : clauses) {
     for (int i : clause)
