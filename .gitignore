@@ -1,2 +1,5 @@
 
 .clang-format
+tmp.out
+tmp.in
+*.out
