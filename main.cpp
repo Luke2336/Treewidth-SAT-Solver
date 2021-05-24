@@ -70,10 +70,10 @@ vector<vector<int>> genClauses(const vector<vector<bool>> G, const int k) {
     for (int j = 0; j < n; j++)
       clauses.emplace_back(vector<int>{-arc(i, j), ctr(i, j, 1)});
     for (int j = 1; j < n; j++) {
-      for (int l = 1; l <= min(j, k); l++) {
+      for (int l = 1; l <= min(j + 1, k); l++) {
         clauses.emplace_back(vector<int>{-ctr(i, j - 1, l), ctr(i, j, l)});
       }
-      for (int l = 2; l <= min(j, k); l++) {
+      for (int l = 2; l <= min(j + 1, k); l++) {
         clauses.emplace_back(
             vector<int>{-arc(i, j), -ctr(i, j - 1, l - 1), ctr(i, j, l)});
       }
