@@ -2,7 +2,7 @@
 using namespace std;
 
 vector<vector<bool>> read(char file[], int &k) {
-  freopen(file, "r", stdin);
+  FILE *fp = freopen(file, "r", stdin);
   int n, m;
   cin >> n >> m >> k;
   vector<vector<bool>> ret(n, vector<bool>(n));
@@ -10,6 +10,7 @@ vector<vector<bool>> read(char file[], int &k) {
     cin >> a >> b;
     ret[a][b] = ret[b][a] = true;
   }
+  fclose(fp);
   return ret;
 }
 
@@ -76,13 +77,14 @@ vector<vector<int>> genClauses(const vector<vector<bool>> G, const int k) {
 }
 
 void writeCNF(int n, int k, vector<vector<int>> clauses) {
-  freopen("tmp.in", "r", stdin);
+  FILE *fp = freopen("tmp.in", "r", stdin);
   cout << "c\np cnf " << n * n * (k + 2) << ' ' << clauses.size() << '\n';
   for (auto clause : clauses) {
     for (int i : clause)
       cout << i << ' ';
     cout << "0\n";
   }
+  fclose(fp);
 }
 
 bool exeMiniSAT(char MiniSAT[]) {
@@ -90,9 +92,10 @@ bool exeMiniSAT(char MiniSAT[]) {
   strcpy(cmd, MiniSAT);
   strcat(cmd, " tmp.in tmp.out");
   system(cmd);
-  freopen("tmp.out", "r", stdin);
+  FILE *fp = freopen("tmp.out", "r", stdin);
   string str;
   cin >> str;
+  fclose(fp);
   return str == "SAT";
 }
 
@@ -104,7 +107,8 @@ int main(int argc, char *argv[]) {
   auto Clauses = genClauses(G, k);
   writeCNF(G.size(), k, Clauses);
   bool SAT = exeMiniSAT(argv[3]);
-  freopen(argv[2], "w", stdout);
+  FILE *fp = freopen(argv[2], "w", stdout);
   cout << (SAT ? "YES" : "NO") << '\n';
+  fclose(fp);
   return 0;
 }
