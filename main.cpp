@@ -25,6 +25,9 @@ vector<vector<int>> genClauses(const vector<vector<bool>> G, const int k) {
   // Triangulation
   vector<vector<int>> clauses;
   for (int i = 0; i < n; i++) {
+    // TODO
+  }
+  for (int i = 0; i < n; i++) {
     for (int j = i + 1; j < n; j++) {
       if (!G[i][j])
         continue;
@@ -43,7 +46,7 @@ vector<vector<int>> genClauses(const vector<vector<bool>> G, const int k) {
         clauses.emplace_back(
             vector<int>{-arc(i, j), -arc(i, l), -ord(j, l), arc(j, l)});
         clauses.emplace_back(
-            vector<int>{-arc(i, j), -arc(i, l), ord(j, l), arc(j, l)});
+            vector<int>{-arc(i, j), -arc(i, l), ord(j, l), arc(l, j)});
       }
     }
   }
