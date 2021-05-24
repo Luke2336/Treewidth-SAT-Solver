@@ -106,13 +106,16 @@ bool exeMiniSAT(char MiniSAT[]) {
   strcat(cmd, " tmp.in tmp.out");
   system(cmd);
   FILE *fp = freopen("tmp.out", "r", stdin);
-  string str;
-  cin >> str;
+  string str = "";
+  while (str != "SAT" && str != "UNSAT")
+    cin >> str;
   fclose(fp);
+  cerr << "str = " << str << "\n";
   return str == "SAT";
 }
 
 int main(int argc, char *argv[]) {
+  ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   if (argc < 4)
     return 0;
   int k;
