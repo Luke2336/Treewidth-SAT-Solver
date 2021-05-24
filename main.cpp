@@ -2,15 +2,16 @@
 using namespace std;
 
 vector<vector<bool>> read(char file[], int &k) {
-  FILE *fp = freopen(file, "r", stdin);
+  fstream fin;
+  fin.open(file, ios::in | ios::binary);
   int n, m;
-  cin >> n >> m >> k;
+  fin >> n >> m >> k;
   vector<vector<bool>> ret(n, vector<bool>(n));
   for (int i = 0, a, b; i < m; i++) {
-    cin >> a >> b;
+    fin >> a >> b;
     ret[a][b] = ret[b][a] = true;
   }
-  fclose(fp);
+  fin.close();
   return ret;
 }
 
@@ -90,14 +91,15 @@ vector<vector<int>> genClauses(const vector<vector<bool>> G, const int k) {
 }
 
 void writeCNF(int n, int k, vector<vector<int>> clauses) {
-  FILE *fp = freopen("tmp.in", "w", stdout);
-  cout << "c\np cnf " << n * n * (k + 2) << ' ' << clauses.size() << '\n';
+  fstream fout;
+  fout.open("tmp.in", ios::out | ios::binary);
+  fout << "c\np cnf " << n * n * (k + 2) << ' ' << clauses.size() << '\n';
   for (auto clause : clauses) {
     for (int i : clause)
-      cout << i << ' ';
-    cout << "0\n";
+      fout << i << ' ';
+    fout << "0\n";
   }
-  fclose(fp);
+  fout.close();
 }
 
 bool exeMiniSAT(char MiniSAT[]) {
@@ -105,17 +107,17 @@ bool exeMiniSAT(char MiniSAT[]) {
   strcpy(cmd, MiniSAT);
   strcat(cmd, " tmp.in tmp.out");
   system(cmd);
-  FILE *fp = freopen("tmp.out", "r", stdin);
+  fstream fin;
+  fin.open("tmp.out", ios::in | ios::binary);
   string str = "";
   while (str != "SAT" && str != "UNSAT")
-    cin >> str;
-  fclose(fp);
+    fin >> str;
+  fin.close();
   cerr << "str = " << str << "\n";
   return str == "SAT";
 }
 
 int main(int argc, char *argv[]) {
-  ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
   if (argc < 4)
     return 0;
   int k;
@@ -123,8 +125,9 @@ int main(int argc, char *argv[]) {
   auto Clauses = genClauses(G, k);
   writeCNF(G.size(), k, Clauses);
   bool SAT = exeMiniSAT(argv[3]);
-  FILE *fp = freopen(argv[2], "w", stdout);
-  cout << (SAT ? "YES" : "NO") << '\n';
-  fclose(fp);
+  fstream fout;
+  fout.open(argv[2], ios::in | ios::binary);
+  fout << (SAT ? "YES" : "NO") << '\n';
+  fout.close();
   return 0;
 }
