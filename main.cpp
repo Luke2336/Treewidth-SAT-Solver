@@ -70,15 +70,17 @@ vector<vector<int>> genClauses(const vector<vector<bool>> G, const int k) {
     for (int j = 0; j < n; j++)
       clauses.emplace_back(vector<int>{-arc(i, j), ctr(i, j, 1)});
     for (int j = 1; j < n; j++) {
-      for (int l = 2; l <= min(j, k); l++) {
+      for (int l = 1; l <= min(j, k); l++) {
         clauses.emplace_back(vector<int>{-ctr(i, j - 1, l), ctr(i, j, l)});
+      }
+      for (int l = 2; l <= min(j, k); l++) {
         clauses.emplace_back(
             vector<int>{-arc(i, j), -ctr(i, j - 1, l - 1), ctr(i, j, l)});
       }
     }
   }
   for (int i = 0; i < n; i++) {
-    for (int j = k + 1; j < n; j++)
+    for (int j = k; j < n; j++)
       clauses.emplace_back(vector<int>{-arc(i, j), -ctr(i, j - 1, k)});
   }
   // Accelerate
@@ -113,7 +115,6 @@ bool exeMiniSAT(char MiniSAT[]) {
   while (str != "SAT" && str != "UNSAT")
     fin >> str;
   fin.close();
-  cerr << "str = " << str << "\n";
   return str == "SAT";
 }
 
@@ -126,7 +127,7 @@ int main(int argc, char *argv[]) {
   writeCNF(G.size(), k, Clauses);
   bool SAT = exeMiniSAT(argv[3]);
   fstream fout;
-  fout.open(argv[2], ios::in | ios::binary);
+  fout.open(argv[2], ios::out | ios::binary);
   fout << (SAT ? "YES" : "NO") << '\n';
   fout.close();
   return 0;
